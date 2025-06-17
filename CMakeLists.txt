@@ -4,7 +4,7 @@ project(demonophobia)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-list(APPEND CMAKE_PREFIX_PATH "./build/build/generators")
+list(APPEND CMAKE_PREFIX_PATH "./build/generators")
 
 find_package(raylib REQUIRED)
 find_package(spdlog REQUIRED)
