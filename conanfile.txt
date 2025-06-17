@@ -1,0 +1,8 @@
+[requires]
+raylib/5.5
+spdlog/1.15.3
+[generators]
+CMakeDeps
+CMakeToolchain
+[layout]
+cmake_layout
