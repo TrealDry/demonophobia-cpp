@@ -13,8 +13,8 @@ void SitState::exit() {
 void SitState::update() {
     if (IsKeyPressed(KEY_A) || IsKeyPressed(KEY_D)) {
         m_owner->changeState(m_owner->m_crawlState);
+        m_owner->changeLook(IsKeyPressed(KEY_D));
     } else if (IsKeyReleased(KEY_S)) {
         m_owner->changeState(m_owner->m_idleState);
-        
     }
 }

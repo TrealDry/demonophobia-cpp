@@ -1,12 +1,13 @@
 #pragma once
 
 #include "raylib.h"
-#include "spdlog/spdlog.h"
+
+#include "object.hpp"
 
 #include "../core/sprite_sheet.hpp"
 #include "../core/animation.hpp"
 
-#include "../state/custom_state/hero/include.hpp"
+#include "../state/custom/hero/include.hpp"
 
 #define ANIM_IDLE     0
 #define ANIM_WALK     1
@@ -16,7 +17,15 @@
 
 #define ANIM_SIZE 5
 
-class Hero {
+#define SPRITE_OFFSET_X 9.f
+
+#define BODY_COLOR Color(230, 41, 55, 100)
+#define HITBOX_COLOR Color(230, 41, 55, 100)
+
+class Room;
+class Wall;
+
+class Hero : public Object {
 
 public:
     float m_speed = 100.f;
@@ -26,12 +35,25 @@ public:
     bool m_lookRight   = false;
     bool m_lookChanged = false;
 
-    Vector2 m_bodyPosition = {0.f, 200.f};
+    bool  m_collided     = false;
+    Wall* m_collidedWall = nullptr;
+
+    Room* m_owner = nullptr;
+
+    Vector2 m_bodyPosition = {500.f, 198.f};
     Vector2 m_bodySize     = {185.f, 256.f};
 
     Rectangle m_body = {
         m_bodyPosition.x, m_bodyPosition.y,
         m_bodySize.x,     m_bodySize.y
+    };
+
+    Vector2 m_hitboxSize = {52.f, 240.f};
+
+    Rectangle m_hitbox = {
+        (m_bodyPosition.x + (m_bodySize.x / 2.f)) - (m_hitboxSize.x / 2.f),  // + HITBOX_X_OFFSET
+        m_bodyPosition.y + (m_bodySize.y - m_hitboxSize.y),
+        m_hitboxSize.x, m_hitboxSize.y
     };
     
     // 1110x1280, 6x5 sprite, 185x256
@@ -56,10 +78,10 @@ public:
     void changeState(State& state);
     void changeLook(bool lookRight);
 
-    void movementHandler();
+    void collisionHandler();
     void animationHandler();
-    void update();
 
-    void draw();
+    void update() override;
+    void draw()   override;
 
 };

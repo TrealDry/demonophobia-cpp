@@ -14,9 +14,9 @@ public:
 public:
     HalfSitState(Hero* owner) : State(owner), m_counter(0.f) {}
 
-    virtual void enter() override;
-    virtual void exit()  override;
+    void enter() override;
+    void exit()  override;
 
-    virtual void update() override;
+    void update() override;
 
 };

@@ -29,7 +29,9 @@ void CrawlState::exit() {
 void CrawlState::update() {
     movementHandler();
 
-    if (!m_owner->m_move) {
+    if (m_owner->m_collided) {
+        m_owner->changeState(m_owner->m_sitState);
+    } else if (!m_owner->m_move) {
         if (IsKeyDown(KEY_S)) {
             m_owner->changeState(m_owner->m_sitState);
         } else {

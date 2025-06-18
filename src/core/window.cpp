@@ -1,13 +1,11 @@
 #include "window.hpp"
-#include "spdlog/spdlog.h"
 
 Window::Window() {
-    spdlog::info("Create window");
-
     InitWindow(m_screenWidth, m_screenHeight, m_windowName.c_str());
     SetTargetFPS(m_fps);
-    
-    m_scene = new Scene;
+
+    m_hero  = new Hero();
+    m_scene = new Room1(m_hero);
 }
 
 Window& Window::getInstance() {

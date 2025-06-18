@@ -1,5 +1,7 @@
 #include "hero.hpp"
 
+#include "../scene/location/room.hpp"
+
 Hero::Hero() :   
     m_texture{LoadTexture("assets\\sprite\\hero\\hero.png")}, 
     m_sprite{&m_texture, {6.f, 5.f}}, 
@@ -23,8 +25,9 @@ void Hero::changeState(State& state) {
 }
 
 void Hero::setPosition() {
+    m_hitbox.x += m_bodyPosition.x - m_body.x;  // прибавляем разницу
+
     m_body.x = m_bodyPosition.x;
-    m_body.y = m_bodyPosition.y;
 }
 
 void Hero::changeLook(bool lookRight) {
@@ -32,6 +35,26 @@ void Hero::changeLook(bool lookRight) {
 
     m_lookRight = lookRight;
     m_lookChanged = true;
+
+    // if (lookRight) {
+    //     m_hitbox.x -= HITBOX_X_OFFSET * 2;
+    // } else {
+    //     m_hitbox.x += HITBOX_X_OFFSET * 2;
+    // }
+}
+
+void Hero::collisionHandler() {
+    for (auto wall: m_owner->getWall()) {
+        if (!CheckCollisionRecs(m_hitbox, wall.m_body))
+            continue;
+
+        m_collided     = true;
+        m_collidedWall = wall.getPtr();
+        return;
+    }
+
+    m_collided     = false;
+    m_collidedWall = nullptr;
 }
 
 void Hero::animationHandler() {
@@ -40,19 +63,25 @@ void Hero::animationHandler() {
         m_lookChanged = false;
     }
 
-    for (size_t i = 0; i < ANIM_SIZE; i++) {
-        m_animations[i].update();
+    for (auto& m_animation : m_animations) {
+        m_animation.update();
     }
 }
 
 void Hero::update() {
+    collisionHandler();
     m_currentState->update();
     animationHandler();
 }
 
 void Hero::draw() {
+    float spriteOffsetX = (m_lookRight ? 1 : -1) * SPRITE_OFFSET_X;
+
     DrawTextureRec(
         m_texture, m_sprite.getTextureSource(), 
-        m_bodyPosition, WHITE
+        {m_bodyPosition.x + spriteOffsetX, m_bodyPosition.y}, WHITE
     );
+
+    DrawRectangleRec(m_body,   BODY_COLOR);
+    DrawRectangleRec(m_hitbox, HITBOX_COLOR);
 }

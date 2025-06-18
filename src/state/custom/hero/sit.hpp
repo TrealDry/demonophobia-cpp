@@ -9,9 +9,9 @@ class SitState : public State {
 public:
     SitState(Hero* owner) : State(owner) {}
 
-    virtual void enter() override;
-    virtual void exit()  override;
+    void enter() override;
+    void exit()  override;
 
-    virtual void update() override;
+    void update() override;
 
 };

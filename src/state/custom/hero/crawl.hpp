@@ -9,11 +9,11 @@ class CrawlState : public State {
 public:
     CrawlState(Hero* owner) : State(owner) {}
 
-    virtual void enter() override;
-    virtual void exit()  override;
+    void enter() override;
+    void exit()  override;
 
     void movementHandler();
 
-    virtual void update() override;
+    void update() override;
 
 };
