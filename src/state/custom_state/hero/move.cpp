@@ -19,11 +19,11 @@ void MoveState::movementHandler() {
 
 void MoveState::enter() {
     m_owner->m_sprite.changeFrame(0);
-    m_owner->m_animations[1].play();
+    m_owner->m_animations[ANIM_WALK].play();
 }
 
 void MoveState::exit() {
-    m_owner->m_animations[1].stop();
+    m_owner->m_animations[ANIM_WALK].stop();
 }
 
 void MoveState::update() {

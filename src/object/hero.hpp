@@ -39,8 +39,11 @@ public:
     SpriteSheet m_sprite;
     Animation m_animations[ANIM_SIZE];
 
-    IdleState m_idleState;
-    MoveState m_moveState;
+    IdleState    m_idleState;
+    MoveState    m_moveState;
+    HalfSitState m_halfSitState;
+    SitState     m_sitState;
+    CrawlState   m_crawlState;
 
     bool m_initCurrentState = true;
     State* m_currentState = nullptr;

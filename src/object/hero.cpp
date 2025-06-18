@@ -8,8 +8,9 @@ Hero::Hero() :
         Animation{&m_sprite, {0.f, 5.f},  4.f, false},
         Animation{&m_sprite, {8.f, 8.f},  1.f, false}, 
         Animation{&m_sprite, {7.f, 7.f},  1.f, false},
-        Animation{&m_sprite, {9.f, 11.f}, 3.f, true}
-    }, m_idleState{this}, m_moveState{this}
+        Animation{&m_sprite, {9.f, 11.f}, 3.f, true}}, 
+    m_idleState{this}, m_moveState{this}, m_halfSitState{this}, 
+    m_sitState{this}, m_crawlState{this}
 {
     m_currentState = &m_idleState;
     changeState(m_idleState);
