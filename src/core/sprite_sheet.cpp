@@ -20,9 +20,18 @@ void SpriteSheet::changeFrame(int frame) {
     };
     m_textureSource = newTextureSource;
     m_selectedFrame = frame;
+
+    hardFlipFrame(m_flipH, m_flipV);
 }
 
-void SpriteSheet::flipFrame(bool flipH, bool flipV) {
+void SpriteSheet::setFlip(bool flipH, bool flipV) {
+    hardFlipFrame(m_flipH != flipH, m_flipV != flipV);
+
+    m_flipH = flipH;
+    m_flipV = flipV;
+}
+
+void SpriteSheet::hardFlipFrame(bool flipH, bool flipV) {
     m_textureSource.width  = flipH ? -m_textureSource.width  : m_textureSource.width;
     m_textureSource.height = flipV ? -m_textureSource.height : m_textureSource.height;
 }

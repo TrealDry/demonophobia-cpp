@@ -15,6 +15,9 @@ protected:
 
     int m_selectedFrame;
 
+    bool m_flipH = false;
+    bool m_flipV = false;
+
 protected:
     void initFrameSizePixel();
     void initFields();
@@ -30,6 +33,9 @@ public:
     int        getSelectedFrame() { return m_selectedFrame; }
 
     void changeFrame(int frame);
-    void flipFrame(bool flipH, bool flipV);
+
+    void setFlip(bool flipH, bool flipV);
+    bool getFlip(bool isFlipH) { return isFlipH ? m_flipH : m_flipV; }
+    void hardFlipFrame(bool flipH, bool flipV);  // do not use
     
 };

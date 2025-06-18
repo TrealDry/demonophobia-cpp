@@ -1,10 +1,5 @@
 #include "animation.hpp"
 
-void Animation::setFlip(bool flipH, bool flipV) {
-    m_flipH = flipH; 
-    m_flipV = flipV;
-}
-
 void Animation::update() {
     if (!m_isPlaying) return;
 
@@ -14,10 +9,28 @@ void Animation::update() {
 
     m_animCounter = 0.f;
     syncCurrentFrame();
+
+    if (m_oneFrame) goto skipAnim;
+
+    m_currentFrame += 1 * m_multiplierFrame;
+
+    if (m_currentFrame > (int)m_startEndFrame.y) {
+        if (m_reverseAfterFinish) {
+            m_multiplierFrame = -1;
+            m_currentFrame -= 2;
+        } else {
+            m_currentFrame = (int)m_startEndFrame.x;
+        }
     
-    if (++m_currentFrame > (int)m_startEndFrame.y)
-        m_currentFrame = (int)m_startEndFrame.x;
-    
+    } else if (m_currentFrame < (int)m_startEndFrame.x) {
+        if (m_reverseAfterFinish) {
+            m_multiplierFrame = 1;
+            m_currentFrame += 2;
+        } else {
+            m_currentFrame = (int)m_startEndFrame.y;
+        }
+    }
+
+    skipAnim:
     m_sprite->changeFrame(m_currentFrame);
-    m_sprite->flipFrame(m_flipH, m_flipV);
 }

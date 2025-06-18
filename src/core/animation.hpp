@@ -1,3 +1,5 @@
+#pragma once
+
 #include "raylib.h"
 #include "spdlog/spdlog.h"
 
@@ -10,26 +12,27 @@ protected:
     Vector2 m_startEndFrame;
 
     float m_animSpeed;  // 1.f = 1 frame per second
-    float m_animCounter;
+    float m_animCounter = 0.f;
     float m_animCounterTick;
 
-    int m_currentFrame;
+    int m_currentFrame = 0;
 
-    bool m_isPlaying;
-    bool m_flipH;
-    bool m_flipV;
+    bool m_isPlaying = false;
+
+    char m_multiplierFrame = 1; // 1 = animation move forward, -1 = reverse
+    bool m_reverseAfterFinish = false;
+
+    bool m_oneFrame;
 
 public:
-    Animation(SpriteSheet* sprite, Vector2 startEndFrame, float animSpeed, bool flipH, bool flipV) 
-    : m_sprite(sprite), m_startEndFrame(startEndFrame), m_animSpeed(animSpeed), 
-      m_animCounter(0.f), m_currentFrame(0), m_animCounterTick(1.f / m_animSpeed), 
-      m_isPlaying(false), m_flipH(flipH), m_flipV(flipV)
-    {}
+    Animation(SpriteSheet* sprite, Vector2 startEndFrame, float animSpeed, bool reverseAfterFinish) 
+    : m_sprite(sprite), m_startEndFrame(startEndFrame), 
+      m_animSpeed(animSpeed), m_animCounterTick(1.f / m_animSpeed), 
+      m_reverseAfterFinish(reverseAfterFinish),
+      m_oneFrame(m_startEndFrame.x - m_startEndFrame.y == 0)
+      {}
 
     bool getPlayingStatus() { return m_isPlaying; }
-
-    bool getFlip(bool isFlipH) { return isFlipH ? m_flipH : m_flipV; }
-    void setFlip(bool flipH, bool flipV);
 
     void play() { m_isPlaying = true;  }
     void stop() { m_isPlaying = false; }

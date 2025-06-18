@@ -1,47 +1,52 @@
 #include "hero.hpp"
 
-void Hero::setPosition()
+Hero::Hero() :   
+    m_texture{LoadTexture("assets\\sprite\\hero\\hero.png")}, 
+    m_sprite{&m_texture, {6.f, 5.f}}, 
+    m_animations{
+        Animation{&m_sprite, {6.f, 6.f},  1.f, false}, 
+        Animation{&m_sprite, {0.f, 5.f},  4.f, false},
+        Animation{&m_sprite, {8.f, 8.f},  1.f, false}, 
+        Animation{&m_sprite, {7.f, 7.f},  1.f, false},
+        Animation{&m_sprite, {9.f, 11.f}, 3.f, true}
+    }, m_idleState{this}, m_moveState{this}
 {
+    m_currentState = &m_idleState;
+    changeState(m_idleState);
+}
+
+void Hero::changeState(State& state) {
+    m_currentState->exit();
+    m_currentState = &state;
+    m_currentState->enter();
+}
+
+void Hero::setPosition() {
     m_body.x = m_bodyPosition.x;
     m_body.y = m_bodyPosition.y;
 }
 
-void Hero::update() {
-    static bool heroLookRight = false;
+void Hero::changeLook(bool lookRight) {
+    if (m_lookRight == lookRight) return;
 
-    if (IsKeyDown(KEY_D)) {
-        heroLookRight = true;
-        m_bodyPosition.x += m_speed * GetFrameTime();
-    } else if (IsKeyDown(KEY_A)) {
-        heroLookRight = false;
-        m_bodyPosition.x -= m_speed * GetFrameTime();
-    } else {
-        if (!m_animations[ANIM_IDLE].getPlayingStatus()) {
-            m_sprite.changeFrame(6);
-            m_sprite.flipFrame(heroLookRight, false);
-            m_animations[ANIM_WALK].stop();
-            m_animations[ANIM_IDLE].play();
-        }
+    m_lookRight = lookRight;
+    m_lookChanged = true;
+}
 
-        goto skipWalkAnim;
+void Hero::animationHandler() {
+    if (m_lookChanged) {
+        m_sprite.setFlip(m_lookRight, false);
+        m_lookChanged = false;
     }
 
-    setPosition();
-
-    if (!m_animations[ANIM_WALK].getPlayingStatus()) {
-        m_sprite.changeFrame(0);
-        m_sprite.flipFrame(heroLookRight, false);
-        m_animations[ANIM_IDLE].stop();
-        m_animations[ANIM_WALK].play();
-    }
-
-    skipWalkAnim:
     for (size_t i = 0; i < ANIM_SIZE; i++) {
-        if (m_animations[i].getFlip(true) != heroLookRight)
-            m_animations[i].setFlip(heroLookRight, false);
-        
         m_animations[i].update();
     }
+}
+
+void Hero::update() {
+    m_currentState->update();
+    animationHandler();
 }
 
 void Hero::draw() {
@@ -49,6 +54,4 @@ void Hero::draw() {
         m_texture, m_sprite.getTextureSource(), 
         m_bodyPosition, WHITE
     );
-
-    //DrawRectangleRec(m_body, {230, 41, 55, 100});
 }

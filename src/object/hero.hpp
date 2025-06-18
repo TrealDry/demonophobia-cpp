@@ -6,15 +6,25 @@
 #include "../core/sprite_sheet.hpp"
 #include "../core/animation.hpp"
 
-#define ANIM_IDLE 0
-#define ANIM_WALK 1
+#include "../state/custom_state/hero/include.hpp"
 
-#define ANIM_SIZE 2
+#define ANIM_IDLE     0
+#define ANIM_WALK     1
+#define ANIM_SIT      2
+#define ANIM_HALF_SIT 3
+#define ANIM_CRAWL    4
+
+#define ANIM_SIZE 5
 
 class Hero {
 
 public:
     float m_speed = 100.f;
+
+    bool m_move = false;
+
+    bool m_lookRight   = false;
+    bool m_lookChanged = false;
 
     Vector2 m_bodyPosition = {0.f, 200.f};
     Vector2 m_bodySize     = {185.f, 256.f};
@@ -28,19 +38,25 @@ public:
     Texture2D m_texture;
     SpriteSheet m_sprite;
     Animation m_animations[ANIM_SIZE];
+
+    IdleState m_idleState;
+    MoveState m_moveState;
+
+    bool m_initCurrentState = true;
+    State* m_currentState = nullptr;
     
 public:
-    Hero() :   
-        m_texture{LoadTexture("assets\\sprite\\hero\\hero.png")}, 
-        m_sprite{&m_texture, {6.f, 5.f}}, 
-        m_animations{
-            Animation{&m_sprite, {6.f, 6.f}, 1.f, false, false}, 
-            Animation{&m_sprite, {0.f, 5.f}, 4.f, false, false}
-        } {}
-
+    Hero();
+    
     void setPosition();
 
+    void changeState(State& state);
+    void changeLook(bool lookRight);
+
+    void movementHandler();
+    void animationHandler();
     void update();
+
     void draw();
 
 };
