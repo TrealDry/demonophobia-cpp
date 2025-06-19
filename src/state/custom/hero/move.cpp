@@ -29,9 +29,7 @@ void MoveState::exit() {
 void MoveState::update() {
     movementHandler();
 
-    if (m_owner->m_collided) {
-        m_owner->changeState(m_owner->m_idleState);
-    } else if (!m_owner->m_move) {
+    if (!m_owner->m_move || m_owner->m_collided) {
         m_owner->changeState(m_owner->m_idleState);
     }
 }

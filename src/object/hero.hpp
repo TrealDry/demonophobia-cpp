@@ -78,6 +78,8 @@ public:
     void changeState(State& state);
     void changeLook(bool lookRight);
 
+    void resolveCollision();
+
     void collisionHandler();
     void animationHandler();
 

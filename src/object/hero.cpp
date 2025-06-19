@@ -28,6 +28,7 @@ void Hero::setPosition() {
     m_hitbox.x += m_bodyPosition.x - m_body.x;  // прибавляем разницу
 
     m_body.x = m_bodyPosition.x;
+    spdlog::info("ANOTHER body x = {}", m_body.x);
 }
 
 void Hero::changeLook(bool lookRight) {
@@ -35,26 +36,47 @@ void Hero::changeLook(bool lookRight) {
 
     m_lookRight = lookRight;
     m_lookChanged = true;
+}
 
-    // if (lookRight) {
-    //     m_hitbox.x -= HITBOX_X_OFFSET * 2;
-    // } else {
-    //     m_hitbox.x += HITBOX_X_OFFSET * 2;
-    // }
+void Hero::resolveCollision() {
+    Rectangle& wall = m_collidedWall->m_body;
+    float oldXPosHitbox = m_hitbox.x;
+
+    if (m_collidedWall->m_isRight) {
+        m_hitbox.x = wall.x - m_hitbox.width - 0.1f;
+    } else {
+        m_hitbox.x = wall.x + wall.width + 0.1f;
+    }
+
+    spdlog::info("body x = {}", m_body.x);
+    spdlog::info("old hitbox x = {}", oldXPosHitbox);
+    spdlog::info("hitbox x = {}", m_hitbox.x);
+    m_bodyPosition.x -= oldXPosHitbox - m_hitbox.x;
+    m_body.x = m_bodyPosition.x;
+    spdlog::info("after body x = {}", m_body.x);
 }
 
 void Hero::collisionHandler() {
-    for (auto wall: m_owner->getWall()) {
+    bool collisionDetected = false;
+
+    for (auto& wall: m_owner->getWall()) {
         if (!CheckCollisionRecs(m_hitbox, wall.m_body))
             continue;
 
-        m_collided     = true;
-        m_collidedWall = wall.getPtr();
+        m_collided        = true;
+        m_collidedWall    = &wall;
+        collisionDetected = true;
+        break;
+    }
+
+    if (!collisionDetected) {
+        m_collided     = false;
+        m_collidedWall = nullptr;
         return;
     }
 
-    m_collided     = false;
-    m_collidedWall = nullptr;
+    spdlog::info("Collision detected!");
+    resolveCollision();
 }
 
 void Hero::animationHandler() {
@@ -69,13 +91,13 @@ void Hero::animationHandler() {
 }
 
 void Hero::update() {
-    collisionHandler();
     m_currentState->update();
+    collisionHandler();
     animationHandler();
 }
 
 void Hero::draw() {
-    float spriteOffsetX = (m_lookRight ? 1 : -1) * SPRITE_OFFSET_X;
+    float spriteOffsetX = (m_lookRight ? 1.f : -1.f) * SPRITE_OFFSET_X;
 
     DrawTextureRec(
         m_texture, m_sprite.getTextureSource(), 

@@ -10,9 +10,10 @@ class Wall : public Object {
 
 public:
     Rectangle m_body;
+    bool m_isRight;
 
 public:
-    Wall(Vector2 position, Vector2 size);
+    Wall(Vector2 position, Vector2 size, bool isRight);
 
     Wall* getPtr() { return this; }
 
