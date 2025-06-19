@@ -17,25 +17,40 @@ void CrawlState::movementHandler() {
     m_owner->setPosition();
 }
 
-void CrawlState::enter() {
+void CrawlState::playAnimation() {
+    if (m_animIsPlaying) return;
+
     m_owner->m_sprite.changeFrame(9);
     m_owner->m_animations[ANIM_CRAWL].play();
+
+    m_animIsPlaying = true;
 }
 
+void CrawlState::enter() {}
+
 void CrawlState::exit() {
+    m_animIsPlaying = false;
     m_owner->m_animations[ANIM_CRAWL].stop();
 }
 
 void CrawlState::update() {
     movementHandler();
+    m_owner->collisionHandler();
 
     if (m_owner->m_collided) {
         m_owner->changeState(m_owner->m_sitState);
-    } else if (!m_owner->m_move) {
+        return;
+    }
+
+    if (!m_owner->m_move) {
         if (IsKeyDown(KEY_S)) {
             m_owner->changeState(m_owner->m_sitState);
         } else {
             m_owner->changeState(m_owner->m_idleState);
         }
+
+        return;
     }
+
+    playAnimation();
 }

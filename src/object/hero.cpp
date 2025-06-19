@@ -28,7 +28,6 @@ void Hero::setPosition() {
     m_hitbox.x += m_bodyPosition.x - m_body.x;  // прибавляем разницу
 
     m_body.x = m_bodyPosition.x;
-    spdlog::info("ANOTHER body x = {}", m_body.x);
 }
 
 void Hero::changeLook(bool lookRight) {
@@ -43,17 +42,13 @@ void Hero::resolveCollision() {
     float oldXPosHitbox = m_hitbox.x;
 
     if (m_collidedWall->m_isRight) {
-        m_hitbox.x = wall.x - m_hitbox.width - 0.1f;
+        m_hitbox.x = wall.x - m_hitbox.width - 0.01f;
     } else {
-        m_hitbox.x = wall.x + wall.width + 0.1f;
+        m_hitbox.x = wall.x + wall.width + 0.01f;
     }
 
-    spdlog::info("body x = {}", m_body.x);
-    spdlog::info("old hitbox x = {}", oldXPosHitbox);
-    spdlog::info("hitbox x = {}", m_hitbox.x);
     m_bodyPosition.x -= oldXPosHitbox - m_hitbox.x;
     m_body.x = m_bodyPosition.x;
-    spdlog::info("after body x = {}", m_body.x);
 }
 
 void Hero::collisionHandler() {
@@ -75,7 +70,6 @@ void Hero::collisionHandler() {
         return;
     }
 
-    spdlog::info("Collision detected!");
     resolveCollision();
 }
 
@@ -92,7 +86,6 @@ void Hero::animationHandler() {
 
 void Hero::update() {
     m_currentState->update();
-    collisionHandler();
     animationHandler();
 }
 
@@ -104,6 +97,8 @@ void Hero::draw() {
         {m_bodyPosition.x + spriteOffsetX, m_bodyPosition.y}, WHITE
     );
 
-    DrawRectangleRec(m_body,   BODY_COLOR);
-    DrawRectangleRec(m_hitbox, HITBOX_COLOR);
+    if (Debug::m_debugMode) {
+        DrawRectangleRec(m_body,   BODY_COLOR);
+        DrawRectangleRec(m_hitbox, HITBOX_COLOR);
+    }
 }

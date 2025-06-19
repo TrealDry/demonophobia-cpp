@@ -8,6 +8,7 @@ void Wall::update() {
 }
 
 void Wall::draw() {
-    DrawRectangleRec(m_body, WALL_COLOR);
+    if (Debug::m_debugMode)
+        DrawRectangleRec(m_body, WALL_COLOR);
 }
 

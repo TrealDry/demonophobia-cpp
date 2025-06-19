@@ -1,10 +1,11 @@
 #pragma once
 
-#include "raylib.h"
-
 #include "../../state.hpp"
 
 class CrawlState : public State {
+
+public:
+    bool m_animIsPlaying = false;
 
 public:
     CrawlState(Hero* owner) : State(owner) {}
@@ -12,6 +13,7 @@ public:
     void enter() override;
     void exit()  override;
 
+    void playAnimation();
     void movementHandler();
 
     void update() override;

@@ -4,8 +4,9 @@
 
 #include "object.hpp"
 
-#include "../core/sprite_sheet.hpp"
+#include "../core/debug.hpp"
 #include "../core/animation.hpp"
+#include "../core/sprite_sheet.hpp"
 
 #include "../state/custom/hero/include.hpp"
 

@@ -15,6 +15,7 @@ Window& Window::getInstance() {
 
 void Window::run() {
     while (!WindowShouldClose()) {
+        Debug::update();
         m_scene->update();
 
         BeginDrawing();

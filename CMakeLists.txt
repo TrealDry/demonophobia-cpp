@@ -19,7 +19,9 @@ endforeach()
 
 message("=== END ===")
 
-add_executable(${PROJECT_NAME} ${SRC_FILES})
+add_executable(${PROJECT_NAME} ${SRC_FILES}
+        src/core/debug.cpp
+        src/core/debug.hpp)
 target_link_libraries(${PROJECT_NAME} raylib)
 target_link_libraries(${PROJECT_NAME} spdlog::spdlog)
 

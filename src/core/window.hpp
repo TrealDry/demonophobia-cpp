@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include "debug.hpp"
 #include "../object/hero.hpp"
 #include "../scene/location/custom/room/room1.hpp"
 

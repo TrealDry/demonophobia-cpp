@@ -3,6 +3,7 @@
 #include "raylib.h"
 
 #include "object.hpp"
+#include "../core/debug.hpp"
 
 #define WALL_COLOR Color(130, 130, 130, 200)
 
