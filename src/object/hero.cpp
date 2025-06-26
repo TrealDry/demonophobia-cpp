@@ -3,8 +3,8 @@
 #include "../scene/location/room.hpp"
 
 Hero::Hero() :   
-    m_texture{LoadTexture("assets\\sprite\\hero\\hero.png")}, 
-    m_sprite{&m_texture, {6.f, 5.f}}, 
+    m_texture{TextureManager::getInstance().get("hero")},
+    m_sprite{m_texture, {6.f, 5.f}},
     m_animations{
         Animation{&m_sprite, {6.f, 6.f},  1.f, false}, 
         Animation{&m_sprite, {0.f, 5.f},  4.f, false},
@@ -93,7 +93,7 @@ void Hero::draw() {
     float spriteOffsetX = (m_lookRight ? 1.f : -1.f) * SPRITE_OFFSET_X;
 
     DrawTextureRec(
-        m_texture, m_sprite.getTextureSource(), 
+        *m_texture, m_sprite.getTextureSource(),
         {m_bodyPosition.x + spriteOffsetX, m_bodyPosition.y}, WHITE
     );
 

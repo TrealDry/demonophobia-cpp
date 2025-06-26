@@ -3,8 +3,8 @@
 #include "../../room.hpp"
 #include "../../../../object/hero.hpp"
 
-#define ROOM_1A_BG "assets\\sprite\\rooms\\room1a.png"
-#define ROOM_1B_BG "assets\\sprite\\rooms\\room1b.png"
+#define ROOM_1A_BG "room1a"
+#define ROOM_1B_BG "room1b"
 
 class Room1 : public Room {
 
@@ -13,7 +13,6 @@ public:
 
 public:
     Room1(Hero* hero) :
-        Room(hero), m_texture(LoadTexture(ROOM_1A_BG))
-        { m_background = &m_texture; }
+        Room(hero,TextureManager::getInstance().get(ROOM_1A_BG)) {}
 
 };

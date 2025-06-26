@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include "raylib.h"
 
 #include "object.hpp"
@@ -9,6 +10,8 @@
 #include "../core/sprite_sheet.hpp"
 
 #include "../state/custom/hero/include.hpp"
+
+#include "../manager/texture_manager.hpp"
 
 #define ANIM_IDLE     0
 #define ANIM_WALK     1
@@ -58,7 +61,7 @@ public:
     };
     
     // 1110x1280, 6x5 sprite, 185x256
-    Texture2D m_texture;
+    Texture2D* m_texture;
     SpriteSheet m_sprite;
     Animation m_animations[ANIM_SIZE];
 

@@ -26,7 +26,9 @@ void CrawlState::playAnimation() {
     m_animIsPlaying = true;
 }
 
-void CrawlState::enter() {}
+void CrawlState::enter() {
+    m_owner->changeLook(IsKeyDown(KEY_D));
+}
 
 void CrawlState::exit() {
     m_animIsPlaying = false;
